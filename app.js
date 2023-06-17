@@ -95,7 +95,7 @@ app.post("/", function (req, res) {
         if (foundList) {
           foundList.items.push(item);
           foundList.save();
-          res.redirect('/');
+          res.redirect('/'+listName);
         }
       })
       .catch((error) => {

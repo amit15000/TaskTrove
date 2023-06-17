@@ -110,7 +110,8 @@ else{
   List.findOne({ name: listName })
     .then((foundList) => {
       if (foundList) {
-       foundList.items.push(item)     
+       foundList.items.push(item)
+         res.redirect('/' + listName);
       } 
     })
     .catch((error) => {

@@ -1,6 +1,10 @@
 const express = require("express");
 
 const app = express();
+// var ejs = require("ejs");
+
+// const date = require(__dirname+"/date.js");
+// console.log(date());
 
 app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
@@ -10,19 +14,23 @@ const _ =require("lodash")
 app.use(express.static("public"));
 
 
-
+//adding db
 
 const mongoose = require("mongoose");
 
 mongoose.connect("mongodb+srv://Amit_15000:R7IxmCC3jZXqlQni@cluster0.zp9eqi6.mongodb.net/todolistDB");
 
-
+//new item schema
 const itemsSchema = {
   name: String,
 };
 
+// const itemSchema = new mongoose.Schema({
+//     name: String
+//   });
 
-const Item = mongoose.model("Item", itemsSchema); 
+const Item = mongoose.model("Item", itemsSchema); //--using it bcz we are using database
+
 const item1 = new Item({
   name: "Welcome to your todoList",
 });
@@ -41,7 +49,19 @@ const listSchema = {
 };
 const List = mongoose.model("List", listSchema);
 
+// const newUser = new User({ name: 'John Doe', age: 25, email: 'johndoe@example.com' });
+// newUser.save()
+//   .then((result) => {
+//     console.log('User created:', result);
+//   })
+//   .catch((error) => {
+//     console.error('Error creating user:', error);
+//   });
 
+// // let queries="";    esse bas last mein change aata rahega --aage nahi barega esliye query ke place pe ab items us kar raha
+// const items=["Buy Food","Cook Food","Eat Food"];
+// //const array mein push ho sakta hai javascript special
+// var workItems=[];
 
 app.get("/", async function (req, res) {
   try {
@@ -67,7 +87,9 @@ app.get("/", async function (req, res) {
 //custom route
 
 app.get("/:customListName", (req, res) => {
-  const customListName = _.capitalize(req.params.customListName); 
+  const customListName = _.capitalize(req.params.customListName); // Access the value of the 'customListName' parameter
+  // console.log("Dynamic route:", customListName); // Output the dynamic route to the console
+  // res.send(`Dynamic route: ${customListName}`);
 
   List.findOne({ name: customListName })
     .then((foundList) => {
@@ -106,17 +128,18 @@ app.post("/", function (req, res) {
 }
 else{
 
-
+  // findOne function ka return then function ke variable ( here -- foundlist) mein aata hai ---- foundOne returns Null or found list document.
   List.findOne({ name: listName })
     .then((foundList) => {
       if (foundList) {
-       foundList.items.push(item)
-         res.redirect('/' + listName);
+       foundList.items.push(item)      //ex Home route ke andar schema mein items array mein add karna hai
+        foundList.save();
+        res.redirect('/'+ listName)
       } 
     })
     .catch((error) => {
       console.error("Error finding dynamic route:", error);
-      res.send("An error occurred while finding the dynamic route.");
+      res.send("An error occurred while finding the dynamic route."); // Send an error response if there's an issue with finding the dynamic route
     });
 }
 

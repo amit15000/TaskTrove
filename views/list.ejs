@@ -1,0 +1,78 @@
+<%- include('header')-%>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="text-center mt-4">
+          <h1 class="display-4"><%= listTitle %></h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center container2">
+      <div class="col-12 col-md-8">
+        <div class="card mt-4">
+          <div class="card-body">
+              <% newListItems.forEach(function(item, i) { %>
+
+
+                <form action="/delete" method="post">
+                <div class="custom-control custom-checkbox mb-3">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="item<%=i%>"
+                    value="<%=item._id%>"
+                    name="checkbox"
+                    onchange="this.form.submit()"
+                  />
+                  <label class="custom-control-label" for="item<%=i%>">
+                    <%=item.name%>
+                  </label>
+                </div>
+                <input type="hidden" name="listName" value="<%= listTitle %>">
+              </form>
+              <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+
+
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8">
+        <form class="mt-4" action="/" method="post">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="newItem"
+              placeholder="New Item"
+              autocomplete="off"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-primary"
+                type="submit"
+                name="list"
+                value="<%= listTitle %>"
+                
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+<%- include('footer')-%>
